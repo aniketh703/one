@@ -98,7 +98,6 @@
 
         .aero-glass {
             background: linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.2) 100%);
-            -webkit-backdrop-filter: blur(12px);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(255,255,255,0.9);
             box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 10px 30px rgba(0,100,255,0.15);
@@ -118,7 +117,6 @@
         .tape {
             background-color: rgba(255, 255, 255, 0.6);
             box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-            -webkit-backdrop-filter: blur(2px);
             backdrop-filter: blur(2px);
             border-left: 2px dashed rgba(0,0,0,0.1); border-right: 2px dashed rgba(0,0,0,0.1);
         }
@@ -207,11 +205,17 @@
         @media (min-width: 768px) { .close-btn { top: 2rem; right: 2rem; } }
         .close-btn:hover { background: var(--acid-green); color: black; }
         
+        /* FIXED: Increased line-height to prevent overlap and removed nowrap for better responsiveness */
         .manifesto-text {
-            font-size: 8vw; line-height: 0.9; font-weight: 900;
-            text-transform: uppercase; letter-spacing: -0.05em; white-space: nowrap;
+            font-size: 8vw; 
+            line-height: 1.1; 
+            font-weight: 900;
+            text-transform: uppercase; 
+            letter-spacing: -0.05em; 
+            /* white-space: nowrap; REMOVED to allow wrapping */
         }
-        .manifesto-item { border-bottom: 2px solid black; padding: 2rem 0; transition: all 0.3s; }
+        /* FIXED: Increased padding to stop elements from crashing into each other */
+        .manifesto-item { border-bottom: 2px solid black; padding: 3rem 0; transition: all 0.3s; }
         .manifesto-item:hover { background: #ccff00; padding-left: 2rem; }
 
         .credits-grid {
@@ -390,7 +394,7 @@
                     <p class="mt-2">SURVEILLANCE<br>DYSTOPIA</p>
                 </div>
                 <div class="col-span-12 md:col-span-9 pl-0 md:pl-8">
-                    <div class="border border-green-800 bg-black/50 [-webkit-backdrop-filter:blur(4px)] backdrop-blur-sm p-6 mb-8 max-w-2xl relative overflow-hidden hover:border-green-500 transition-colors duration-300" tabindex="0">
+                    <div class="border border-green-800 bg-black/50 backdrop-blur-sm p-6 mb-8 max-w-2xl relative overflow-hidden hover:border-green-500 transition-colors duration-300" tabindex="0">
                         <div class="absolute top-0 left-0 w-full h-[1px] bg-green-500 animate-[scan_2s_linear_infinite] opacity-50"></div>
                         <h2 class="text-3xl md:text-4xl font-bold mb-4 mix-blend-difference text-white">PANOPTICON UI</h2>
                         <p class="font-mono text-sm text-gray-400 mb-6">
@@ -447,7 +451,7 @@
                 </div>
 
                 <!-- INTERACTIVE DESKTOP CANVAS -->
-                <div class="relative h-auto lg:h-[500px] tilt-container flex flex-col gap-8 lg:block p-4 border border-blue-200/30 rounded-xl bg-white/20 [-webkit-backdrop-filter:blur(4px)] backdrop-blur-sm mb-6">
+                <div class="relative h-auto lg:h-[500px] tilt-container flex flex-col gap-8 lg:block p-4 border border-blue-200/30 rounded-xl bg-white/20 backdrop-blur-sm mb-6">
                     
                     <!-- 1. Draggable Desktop Icon: My Computer -->
                     <div class="draggable absolute hidden lg:flex top-4 left-4 flex-col items-center gap-1 cursor-move z-10 group" style="transform: translate3d(0,0,0)">
@@ -504,9 +508,7 @@
                         <div class="bg-gradient-to-r from-gray-800 to-gray-900 px-2 py-1 flex justify-between items-center border-b border-gray-600">
                             <span class="text-[10px] text-green-400 font-mono uppercase">WinAmp_2026</span>
                             <div class="flex gap-1">
-                                <button class="w-2 h-2 bg-red-500 rounded-full hover:bg-red-400" title="Close Window" aria-label="Close Window" onclick="this.closest('.draggable').style.display='none'">
-                                    <span class="sr-only">Close Window</span>
-                                </button>
+                                <button class="w-2 h-2 bg-red-500 rounded-full hover:bg-red-400" onclick="this.closest('.draggable').style.display='none'"></button>
                                 <div class="w-2 h-2 bg-gray-500 rounded-full"></div>
                             </div>
                         </div>
@@ -714,29 +716,27 @@
         <footer class="bg-white border-t-4 border-black text-center font-mono relative overflow-hidden reveal-on-scroll pb-12">
             <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-500 via-green-500 to-blue-500 animate-[gradient_3s_ease_infinite] bg-[length:200%_200%]"></div>
             
-            <div class="container mx-auto relative z-10 px-4 py-12">
-                <div class="mb-12">
-                    <!-- FIXED: Changed tracking-tight to tracking-widest for better legibility on large screens -->
-                    <h2 class="text-4xl md:text-6xl font-bold hover:text-purple-600 transition-colors cursor-default snappy hover:scale-105 inline-block break-words tracking-widest" title="End of transmission signal">END OF FILE</h2>
+            <div class="container mx-auto relative z-10 px-4 py-16">
+                <div class="mb-16">
+                    <!-- FIXED: Adjusted sizing and tracking for better visual balance -->
+                    <h2 class="text-5xl md:text-7xl font-bold hover:text-purple-600 transition-colors cursor-default snappy hover:scale-105 inline-block break-words tracking-wider" title="End of transmission signal">END OF FILE</h2>
                 </div>
                 
-                <div class="flex flex-col md:flex-row justify-center items-center gap-8 mb-12 max-w-4xl mx-auto" role="navigation" aria-label="Footer Navigation">
+                <div class="flex flex-col md:flex-row justify-center items-center gap-8 mb-16 max-w-4xl mx-auto" role="navigation" aria-label="Footer Navigation">
                     
                     <!-- System Bar Group -->
-                    <div class="flex bg-gray-200 border-2 border-black/20 rounded-lg p-1 shadow-sm items-center">
-                        <button onclick="togglePage('manifesto')" class="nav-link-btn" aria-label="Read Manifesto">Manifesto</button>
-                        <div class="w-px h-4 bg-black/20 mx-1"></div>
-                        <button onclick="togglePage('credits')" class="nav-link-btn" aria-label="View Credits">System Logs</button>
+                    <div class="flex bg-gray-200 border-2 border-black/20 rounded-lg p-2 shadow-sm items-center gap-2">
+                        <button onclick="togglePage('manifesto')" class="nav-link-btn text-sm" aria-label="Read Manifesto">Manifesto</button>
+                        <div class="w-px h-4 bg-black/20"></div>
+                        <button onclick="togglePage('credits')" class="nav-link-btn text-sm" aria-label="View Credits">System Logs</button>
                     </div>
 
                     <!-- Reset Action -->
-                    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="nav-link-btn reset-btn" aria-label="Back to Top">Reset Simulation</button>
+                    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="nav-link-btn reset-btn text-blue-600 font-bold text-sm tracking-widest border-b-2 border-transparent hover:border-blue-600" aria-label="Back to Top">RESET SIMULATION</button>
                 </div>
 
-                <!-- FIXED: Increased max-width from lg to 4xl to prevent awkward wrapping on large screens -->
-                <div class="border-t border-gray-200 pt-8 max-w-4xl mx-auto">
-                     <!-- FIXED: Added leading-loose to prevent line overlap -->
-                     <p class="text-[10px] md:text-xs text-gray-500 uppercase tracking-[0.2em] font-semibold leading-loose">
+                <div class="border-t border-gray-200 pt-12 max-w-4xl mx-auto">
+                     <p class="text-[10px] md:text-xs text-gray-500 uppercase tracking-[0.25em] font-semibold leading-loose">
                         © 2026 // Aesthetic Research Division // No Rights Reserved
                     </p>
                 </div>
@@ -871,7 +871,7 @@
                 <!-- Row 3 -->
                 <div class="credits-cell">CREATIVE DEV</div>
                 <div class="credits-cell hover:bg-[#ff00cc] hover:text-white transition-colors">
-                    [Your Name Here]<br>
+                    Aniketh Vustepalle<br>
                     <span class="text-[10px] md:text-xs opacity-70">Site Architecture & Build</span>
                 </div>
 
