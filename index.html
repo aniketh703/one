@@ -63,12 +63,6 @@
             transform-style: preserve-3d;
             will-change: transform;
         }
-
-        /* GPU-accelerated fixed overlays */
-        .global-noise,
-        .scanlines {
-            will-change: auto; /* Only hint when needed to avoid memory overhead */
-        }
         
         .hacker-text {
             font-family: 'Courier New', monospace;
@@ -1255,23 +1249,28 @@
             // Cache tilt elements once instead of querying on every mouse move
             const tiltElements = document.querySelectorAll('.tilt-element');
             let tiltFrameId = null;
+            let latestTiltEvent = null;
             
             document.addEventListener('mousemove', (e) => {
+                // Store latest event to use in the scheduled frame
+                latestTiltEvent = e;
+                
                 // Throttle using requestAnimationFrame
                 if (tiltFrameId) return;
                 
                 tiltFrameId = requestAnimationFrame(() => {
+                    const evt = latestTiltEvent;
                     tiltElements.forEach(el => {
                         const rect = el.getBoundingClientRect();
                         const container = el.closest('.tilt-container');
                         if(container) {
                            const contRect = container.getBoundingClientRect();
                            // Only tilt if mouse is somewhat near
-                           if(e.clientY > contRect.top - 100 && e.clientY < contRect.bottom + 100) {
+                           if(evt.clientY > contRect.top - 100 && evt.clientY < contRect.bottom + 100) {
                                const centerX = rect.width / 2;
                                const centerY = rect.height / 2;
-                               const x = e.clientX - rect.left;
-                               const y = e.clientY - rect.top;
+                               const x = evt.clientX - rect.left;
+                               const y = evt.clientY - rect.top;
                                const rotateX = ((y - centerY) / centerY) * -10; 
                                const rotateY = ((x - centerX) / centerX) * 10;
                                
@@ -1297,12 +1296,15 @@
         const pupil = document.getElementById('eye-pupil');
         if(eyeSection && pupil) {
             let eyeFrameId = null;
+            let latestEyeEvent = null;
             eyeSection.addEventListener('mousemove', (e) => {
+                latestEyeEvent = e;
                 if (eyeFrameId) return;
                 eyeFrameId = requestAnimationFrame(() => {
+                    const evt = latestEyeEvent;
                     const rect = eyeSection.getBoundingClientRect();
-                    const x = (e.clientX - rect.left - rect.width/2) / 20;
-                    const y = (e.clientY - rect.top - rect.height/2) / 20;
+                    const x = (evt.clientX - rect.left - rect.width/2) / 20;
+                    const y = (evt.clientY - rect.top - rect.height/2) / 20;
                     pupil.style.transform = `translate(${x}px, ${y}px)`;
                     eyeFrameId = null;
                 });
@@ -1314,12 +1316,15 @@
         const spinObj = document.getElementById('spin-obj');
         if(immersiveSection && spinObj) {
              let spinFrameId = null;
+             let latestSpinEvent = null;
              immersiveSection.addEventListener('mousemove', (e) => {
+                 latestSpinEvent = e;
                  if (spinFrameId) return;
                  spinFrameId = requestAnimationFrame(() => {
+                     const evt = latestSpinEvent;
                      const rect = immersiveSection.getBoundingClientRect();
-                     const x = (e.clientX - rect.left) / rect.width - 0.5;
-                     const y = (e.clientY - rect.top) / rect.height - 0.5;
+                     const x = (evt.clientX - rect.left) / rect.width - 0.5;
+                     const y = (evt.clientY - rect.top) / rect.height - 0.5;
                      spinObj.style.transform = `rotateX(${y * 45}deg) rotateY(${x * 45}deg)`;
                      spinFrameId = null;
                  });
@@ -1352,10 +1357,15 @@
             let width = 0;
             let logIndex = 0;
             let lastTime = 0;
+            let lastLogTime = 0;
             const targetDuration = 1500; // Target ~1.5 seconds for loading
+            const logUpdateInterval = 250; // Update log text every 250ms
             
             function animateLoader(currentTime) {
-                if (!lastTime) lastTime = currentTime;
+                if (!lastTime) {
+                    lastTime = currentTime;
+                    lastLogTime = currentTime;
+                }
                 const deltaTime = currentTime - lastTime;
                 
                 // Calculate progress based on elapsed time with some randomization
@@ -1369,10 +1379,11 @@
                 bar.style.width = width + '%';
                 percent.textContent = Math.floor(width) + '%';
                 
-                // Update log text periodically
-                if (Math.random() > 0.92 && logIndex < logs.length) {
+                // Update log text based on time interval instead of random chance
+                if (currentTime - lastLogTime >= logUpdateInterval && logIndex < logs.length) {
                     text.textContent = logs[logIndex];
                     logIndex++;
+                    lastLogTime = currentTime;
                 }
                 
                 lastTime = currentTime;
